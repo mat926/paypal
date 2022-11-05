@@ -1,13 +1,16 @@
 import fetch from "node-fetch";
 
-createOrder()
+var accessToken = "A21AAIczIw1gupsGYu4jHWcGiQUsW1ZUA9tvcH-3MlKHMRpoO3UloIlwXeLaAO1j-vBfk39q7b5ddfLuipGwXM1sPqCEQyuYg";
+
+//createOrder();
+retrieveOrder("6L82881641910310C")
 
 async function createOrder() {
     await fetch('https://api-m.sandbox.paypal.com/v2/checkout/orders', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer A21AAIPkrYJsLdKo4UyV-VEWdMwCrSdi0YrQapFoBtyJNgmdHAdB8QOvwmZSGL6TWI20fgROKa1EHUDQZqZwTuqarHtpyiHjQ',
+        'Authorization': `Bearer ${accessToken}`,
         'Prefer': 'return=representation'
     },
     body: JSON.stringify(
@@ -16,7 +19,7 @@ async function createOrder() {
             {
                 items: [
                     {
-                        name: "T-Shirt",
+                        name: "Jeans",
                         description: "Green XL",
                         quantity: "1",
                         unit_amount: {
@@ -42,6 +45,19 @@ async function createOrder() {
             cancel_url: "https://example.com/cancel"
         }
     })
+})
+.then(response => response.json())
+.then(response => console.log(JSON.stringify(response)))
+}
+
+async function retrieveOrder(orderId) {
+    await fetch(`https://api-m.sandbox.paypal.com/v2/checkout/orders/${orderId}`, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+        'Prefer': 'return=representation'
+    }
 })
 .then(response => response.json())
 .then(response => console.log(JSON.stringify(response)))
