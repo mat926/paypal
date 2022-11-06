@@ -1,11 +1,12 @@
 import fetch from "node-fetch";
 
-var accessToken = "A21AAIczIw1gupsGYu4jHWcGiQUsW1ZUA9tvcH-3MlKHMRpoO3UloIlwXeLaAO1j-vBfk39q7b5ddfLuipGwXM1sPqCEQyuYg";
+var accessToken = "A21AAIH0WCyjIRbTXSmSJqfDrzE8rYeGtoPmy0FeUIYH7R-qNTpbpufNXHIbLtW4TkD0s4re1315Ji5N1nYDxxJ06E6V-gbHQ";
 
 //createOrder();
-retrieveOrder("92T83485AV972190N")
+//retrieveOrder("92T83485AV972190N")
 //updateOrder("92T83485AV972190N")
-
+//capturePayment("04S93955NP0785822")
+refundPayment("0MU063516V122491F")
 
 async function createOrder() {
     await fetch('https://api-m.sandbox.paypal.com/v2/checkout/orders', {
@@ -118,6 +119,32 @@ async function updateOrder(orderId) {
         ])
     })
         .then(response => console.log("Response status: " + response.status))
+        .then(response => console.log(JSON.stringify(response)))
+
+}
+
+async function capturePayment(orderId) {
+    await fetch(`https://api-m.sandbox.paypal.com/v2/checkout/orders/${orderId}/capture`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+        }
+    })
+        .then(response => response.json())
+        .then(response => console.log(JSON.stringify(response)))
+
+}
+
+async function refundPayment(transactionID) {
+    await fetch(`https://api-m.sandbox.paypal.com/v2/payments/captures/${transactionID}/refund`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+        }
+    })
+        .then(response => response.json())
         .then(response => console.log(JSON.stringify(response)))
 
 }
